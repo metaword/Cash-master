@@ -1,0 +1,260 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style-type: none;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    background: #090422;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.center {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #0d0630;
+    overflow: hidden;
+    display: block;
+    position: relative;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+    min-height: 100vh;
+}
+
+.banner {
+    position: relative;
+    width: 100%;
+}
+
+.banner > img,
+.banner > img.banner-img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/*
+ * Interactive Hotspots mapped over 2.png
+ */
+.hotspot-playnow {
+    position: absolute;
+    top: 22.6%;
+    left: 17.5%;
+    width: 65%;
+    height: 3.8%;
+    cursor: pointer;
+    border-radius: 40px;
+    z-index: 20;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hotspot-playnow:hover {
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+}
+
+.hotspot-playnow:active {
+    transform: scale(0.97);
+}
+
+.hotspot-badge-android {
+    position: absolute;
+    top: 44.8%;
+    left: 14%;
+    width: 24%;
+    height: 2.2%;
+    cursor: pointer;
+    border-radius: 8px;
+    z-index: 20;
+    transition: box-shadow 0.15s ease;
+}
+
+.hotspot-badge-android:hover {
+    box-shadow: 0 0 14px rgba(72, 239, 128, 0.8);
+}
+
+.hotspot-badge-ios {
+    position: absolute;
+    top: 44.8%;
+    left: 41.5%;
+    width: 20%;
+    height: 2.2%;
+    cursor: pointer;
+    border-radius: 8px;
+    z-index: 20;
+    transition: box-shadow 0.15s ease;
+}
+
+.hotspot-badge-ios:hover {
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.8);
+}
+
+.hotspot-badge-h5 {
+    position: absolute;
+    top: 44.8%;
+    left: 65.5%;
+    width: 20%;
+    height: 2.2%;
+    cursor: pointer;
+    border-radius: 8px;
+    z-index: 20;
+    transition: box-shadow 0.15s ease;
+}
+
+.hotspot-badge-h5:hover {
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.8);
+}
+
+/*
+ * Floating Download Button
+ */
+.download-wrapper {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 720px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.download-button {
+    width: min(320px, 80%);
+    max-width: 320px;
+    height: 72px;
+    cursor: pointer;
+    object-fit: contain;
+    pointer-events: auto;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.75));
+    animation: download-pulse 2s infinite ease-in-out;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.download-button:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 8px 24px rgba(236, 72, 153, 0.8));
+}
+
+.download-button:active {
+    transform: scale(0.96);
+}
+
+@keyframes download-pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.04);
+    }
+}
+
+/*
+ * In-App Browser Guidance Banner
+ */
+#openbrower {
+    position: fixed;
+    top: 10px;
+    right: 15px;
+    display: none;
+    max-width: 280px;
+    z-index: 10000;
+    cursor: pointer;
+    animation: bounce-in 0.4s ease-out;
+}
+
+#openbrower img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+}
+
+@keyframes bounce-in {
+    0% { transform: translateY(-20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/*
+ * iOS Installation Screen
+ */
+.qrcode-container {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #003a94;
+    position: relative;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+    min-height: 100vh;
+}
+
+#qrcode {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.close-button-top {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.75);
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10001;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.close-button-top:hover {
+    background: rgba(239, 68, 68, 0.9);
+    transform: scale(1.1);
+}
+
+.close-button-bottom {
+    display: block;
+    width: calc(100% - 40px);
+    max-width: 380px;
+    margin: 20px auto 40px;
+    min-height: 52px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border: none;
+    border-radius: 28px;
+    padding: 14px 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s, background 0.2s;
+    text-align: center;
+}
+
+.close-button-bottom:hover {
+    transform: scale(1.03);
+    background: linear-gradient(135deg, #059669, #047857);
+}
+
+.close-button-bottom:active {
+    transform: scale(0.97);
+}
+
+/* Compatibility helpers */
+.max_width { max-width: 720px; margin: 0 auto; }

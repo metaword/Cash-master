@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <title>Cash Master - Popular Online Casinos in the United States</title>
+
+    <meta name="description"
+          content="Cash Master Slots – Play Online & Win Big! 🎰 Join thousands of players now! 24/7 Fast Service Available! 🔥 The Hottest Slots Game is Here!">
+
+    <link rel="icon" type="image/webp" href="static/web/logo.webp">
+    <link rel="apple-touch-icon" href="static/web/logo.webp">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Cash Master - Popular Online Casinos in the United States">
+    <meta property="og:description"
+          content="Cash Master Slots – Play Online & Win Big! 🎰 Join thousands of players now! 24/7 Fast Service Available! 🔥">
+    <meta property="og:image" content="static/web/share1.png">
+    <meta property="og:image:width" content="520">
+    <meta property="og:image:height" content="306">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cash Master">
+    <meta name="twitter:description" content="Cash Master Slots – Play Online & Win Big! 🎰 Join thousands of players now!">
+    <meta name="twitter:image" content="static/web/share1.png">
+
+    <link rel="stylesheet" href="static/web/pub_reset.css">
+    <link rel="stylesheet" href="static/web/style.css">
+
+    <script src="static/web/jquery.js"></script>
+    <script src="static/web/clipboard.min.js"></script>
+    <script src="static/web/MobileConfigContentJS.js"></script>
+
+    <script>
+        // Parse URL query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const channelName = urlParams.get("channelName") || "Cash Master777";
+        const channelId = urlParams.get("agent_id") || urlParams.get("channelId") || urlParams.get("a0") || urlParams.get("a1") || "2001";
+
+        let pixid = urlParams.get("pix_id") || urlParams.get("pixel") || "";
+        const fbPid = urlParams.get("fbpid") || "";
+        const fbClickId = urlParams.get("fbcid") || urlParams.get("fbclid") || "";
+
+        let downUrl = "";
+
+        // Verified direct fallback endpoints
+        const defaultApkUrl = "https://mastercash777.com/download/apkfb/" + encodeURIComponent(channelId) + "/CashMasterV1.apk";
+        const defaultH5Url = "https://h5.mastercash777.com/index.html?a0=" + encodeURIComponent(channelId) + "&a1=" + encodeURIComponent(channelId);
+
+        /*
+         * Download and device management
+         */
+        function executeDownload(type, targetUrl) {
+            console.log("Executing download type " + type + ":", targetUrl);
+
+            // Android APK
+            if (type === 1) {
+                downUrl = targetUrl;
+                beginDownloadApk(targetUrl);
+            }
+            // iOS WebClip Profile
+            else if (type === 2) {
+                if (
+                    typeof MobileConfigContent !== "undefined" &&
+                    typeof MobileConfigContent.downMobileConfigContent === "function"
+                ) {
+                    const configUrl = targetUrl.replace(/&/g, "&amp;");
+                    MobileConfigContent.downMobileConfigContent(
+                        channelName + channelId,
+                        channelName,
+                        configUrl
+                    );
+                } else {
+                    window.location.href = targetUrl;
+                }
+            }
+            // Web / Desktop / Online H5
+            else if (type === 3) {
+                window.location.href = targetUrl;
+            }
+        }
+
+        /*
+         * Get APK / H5 download URL (with seamless fallback)
+         */
+        function getDownUrl(type) {
+            if (pixid !== "") {
+                try {
+                    if (typeof fbq === "function") {
+                        fbq("trackCustom", "download");
+                    }
+                } catch (error) {
+                    console.log("Pixel tracking error:", error);
+                }
+            }
+
+            const fallbackUrl = (type === 1) ? defaultApkUrl : defaultH5Url;
+
+            // If running via local file:// protocol, bypass ajax and directly trigger
+            if (window.location.protocol === "file:") {
+                executeDownload(type, fallbackUrl);
+                return;
+            }
+
+            let endpoint = "";
+            if (type === 1) {
+                endpoint = "/down/get_apk";
+            } else if (type === 2 || type === 3) {
+                endpoint = "/down/get_url";
+            } else {
+                console.error("Invalid download type:", type);
+                return;
+            }
+
+            $.ajax({
+                url: endpoint,
+                method: "POST",
+                dataType: "json",
+                cache: false,
+                timeout: 3500,
+
+                data: {
+                    apk_name: "CashMasterV1",
+                    pix_id: pixid,
+                    fbcid: fbClickId,
+                    fbpid: fbPid,
+                    agent_id: channelId,
+                    share_id: channelId,
+                    type: type
+                },
+
+                success: function (res) {
+                    if (res && res.code === 1 && res.url) {
+                        executeDownload(type, res.url);
+                    } else {
+                        console.warn("API response code invalid, using fallback direct URL:", res);
+                        executeDownload(type, fallbackUrl);
+                    }
+                },
+
+                error: function (xhr, status, error) {
+                    console.warn("Backend API not reachable (" + status + "). Seamlessly using fallback direct URL.");
+                    executeDownload(type, fallbackUrl);
+                }
+            });
+        }
+
+        /*
+         * Trigger Android APK download
+         */
+        function beginDownloadApk(targetUrl) {
+            const finalUrl = targetUrl || downUrl || defaultApkUrl;
+
+            let iframe = document.getElementById("hiddenIframe");
+            if (!iframe) {
+                iframe = document.createElement("iframe");
+                iframe.id = "hiddenIframe";
+                iframe.style.display = "none";
+                document.body.appendChild(iframe);
+            }
+            iframe.src = finalUrl;
+
+            // Supplementary fallback trigger
+            setTimeout(function () {
+                try {
+                    const a = document.createElement("a");
+                    a.href = finalUrl;
+                    a.download = "CashMasterV1.apk";
+                    a.style.display = "none";
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                } catch (e) {
+                    window.location.href = finalUrl;
+                }
+            }, 300);
+        }
+
+        /*
+         * Open online version in browser
+         */
+        function goOnline() {
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            if (isMobile) {
+                getDownUrl(3);
+            } else {
+                window.open(defaultH5Url, "_blank");
+            }
+        }
+
+        /*
+         * Detect device and download appropriate version
+         */
+        function downApp() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+
+            const isAndroid = /Android|Adr/i.test(ua);
+            const isIPhone = /iPhone/i.test(ua);
+            const isIPad = /iPad/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+            if (isAndroid) {
+                console.log("Android detected -> downloading APK");
+                getDownUrl(1);
+            } else if (isIPhone || isIPad) {
+                console.log("iOS device detected -> loading install guide & downloading profile");
+                loadQrcodeHtml();
+                getDownUrl(2);
+            } else {
+                console.log("Desktop detected -> launching web game");
+                getDownUrl(3);
+            }
+        }
+
+        /*
+         * Apple device check helper
+         */
+        function isAppleDevice() {
+            return (
+                /iPad|iPhone|iPod/i.test(navigator.userAgent) ||
+                (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+            );
+        }
+
+        /*
+         * Show iOS installation screen
+         */
+        function loadQrcodeHtml() {
+            const qrDiv = document.querySelector('[name="qrcodeDiv"]');
+            const centerDiv = document.querySelector('[name="centerdown"]');
+
+            if (qrDiv) qrDiv.style.display = "block";
+            if (centerDiv) centerDiv.style.display = "none";
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        /*
+         * Close iOS installation screen
+         */
+        function closeQrcodeHtml() {
+            const qrDiv = document.querySelector('[name="qrcodeDiv"]');
+            const centerDiv = document.querySelector('[name="centerdown"]');
+
+            if (qrDiv) qrDiv.style.display = "none";
+            if (centerDiv) centerDiv.style.display = "block";
+        }
+
+        /*
+         * Check and show in-app browser helper
+         */
+        function checkInAppBrowser() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            const isInApp = /FBAN|FBAV|Instagram|TikTok|musical_ly|BytedanceWebview|MicroMessenger|Line|Twitter|Snapchat/i.test(ua);
+            if (isInApp) {
+                const el = document.getElementById("openbrower");
+                if (el) el.style.display = "block";
+            }
+        }
+
+        $(document).ready(function () {
+            checkInAppBrowser();
+        });
+    </script>
+</head>
+
+<body id="body">
+
+    <!-- Main landing page -->
+    <div
+        name="centerdown"
+        class="center appdown"
+        id="content"
+        style="display: block;"
+    >
+
+        <div class="banner">
+
+            <!-- Main graphic banner -->
+            <img
+                src="static/web/2.png"
+                class="banner-img"
+                alt="Cash Master Online Casino"
+            >
+
+            <!-- Interactive Hotspot: PLAY NOW button -->
+            <div
+                class="hotspot-playnow"
+                title="Play Now in Browser"
+                onclick="goOnline()"
+            ></div>
+
+            <!-- Interactive Hotspots: Platform Badges -->
+            <div
+                class="hotspot-badge-android"
+                title="Download for Android"
+                onclick="getDownUrl(1)"
+            ></div>
+
+            <div
+                class="hotspot-badge-ios"
+                title="Download for iOS"
+                onclick="loadQrcodeHtml(); getDownUrl(2);"
+            ></div>
+
+            <div
+                class="hotspot-badge-h5"
+                title="Play Instant H5 Game"
+                onclick="goOnline()"
+            ></div>
+
+            <!-- Browser instruction banner for social app webviews -->
+            <div id="openbrower" onclick="$(this).fadeOut(200)">
+                <img
+                    src="static/web/brower.png"
+                    alt="Open in Safari / External Browser"
+                >
+            </div>
+
+        </div>
+
+        <!-- Sticky Floating Download Button -->
+        <div class="download-wrapper">
+            <img
+                src="static/web/down2.png"
+                class="download-button"
+                alt="Download Cash Master"
+                onclick="downApp()"
+            >
+        </div>
+
+    </div>
+
+
+    <!-- iOS QR / Installation screen -->
+    <div
+        name="qrcodeDiv"
+        class="qrcode-container"
+        style="display: none;"
+    >
+
+        <button
+            type="button"
+            class="close-button-top"
+            aria-label="Close"
+            onclick="closeQrcodeHtml()"
+        >
+            ✕
+        </button>
+
+        <div class="banner">
+
+            <img
+                src="static/web/apple_little2.webp"
+                id="qrcode"
+                alt="iOS installation guide"
+            >
+
+            <button
+                type="button"
+                class="close-button-bottom"
+                onclick="closeQrcodeHtml()"
+            >
+                Return to Game Page
+            </button>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
